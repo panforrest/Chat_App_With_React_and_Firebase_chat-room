@@ -21241,12 +21241,29 @@ var ChatRoom = function (_Component) {
 
     _this.state = {
       message: '',
-      messages: [{ id: 0, text: 'first message' }, { id: 1, text: 'second message' }, { id: 2, text: 'third message' }, { id: 3, text: 'fourth message' }]
+      messages: []
     };
     return _this;
   }
 
   _createClass(ChatRoom, [{
+    key: 'componentDidMount',
+    value: function componentDidMount() {
+      var _this2 = this;
+
+      console.log('componentDidMount');
+      firebase.database().ref('messages/').on('value', function (snapshot) {
+
+        var currentMessages = snapshot.val();
+
+        if (currentMessages != null) {
+          _this2.setState({
+            messages: currentMessages
+          });
+        }
+      });
+    }
+  }, {
     key: 'updateMessage',
     value: function updateMessage(event) {
       console.log('updateMessage: ' + event.target.value);
@@ -21262,11 +21279,13 @@ var ChatRoom = function (_Component) {
         id: this.state.messages.length,
         text: this.state.message
       };
-      var list = Object.assign([], this.state.messages);
-      list.push(nextMessage);
-      this.setState({
-        messages: list
-      });
+
+      firebase.database().ref('messages/' + nextMessage.id).set(nextMessage);
+      // var list = Object.assign([], this.state.messages)
+      // list.push(nextMessage)
+      // this.setState({
+      //   messages: list
+      // })
     }
   }, {
     key: 'render',

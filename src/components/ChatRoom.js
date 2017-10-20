@@ -5,14 +5,23 @@ class ChatRoom extends Component {
     super(props, context)
     this.state = {
       message:'',
-      messages: [
-        {id:0, text:'first message'},
-        {id:1, text:'second message'},
-        {id:2, text:'third message'},
-        {id:3, text:'fourth message'},
-      ]
+      messages: []
     }
   } 
+
+  componentDidMount(){
+  	console.log('componentDidMount')
+  	firebase.database().ref('messages/').on('value', (snapshot) => {
+
+  	  const currentMessages = snapshot.val()
+
+  	  if (currentMessages != null) {
+  	  	this.setState({
+  	  	  messages: currentMessages
+  	  	})
+  	  }
+  	})
+  }
 
   updateMessage(event){
   	console.log('updateMessage: ' + event.target.value)
@@ -27,11 +36,13 @@ class ChatRoom extends Component {
   	  id: this.state.messages.length,
   	  text: this.state.message
   	}
-  	var list = Object.assign([], this.state.messages)
-  	list.push(nextMessage)
-  	this.setState({
-  	  messages: list
-  	})
+
+  	firebase.database().ref('messages/'+nextMessage.id).set(nextMessage)
+  	// var list = Object.assign([], this.state.messages)
+  	// list.push(nextMessage)
+  	// this.setState({
+  	//   messages: list
+  	// })
   } 
 
   render(){
