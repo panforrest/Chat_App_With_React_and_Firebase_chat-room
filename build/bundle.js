@@ -969,6 +969,10 @@ var _reactDom = __webpack_require__(18);
 
 var _reactDom2 = _interopRequireDefault(_reactDom);
 
+var _ChatRoom = __webpack_require__(32);
+
+var _ChatRoom2 = _interopRequireDefault(_ChatRoom);
+
 function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
 
 function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -992,7 +996,8 @@ var App = function (_Component) {
       return _react2.default.createElement(
         'div',
         null,
-        'This is React.'
+        'This is React.',
+        _react2.default.createElement(_ChatRoom2.default, null)
       );
     }
   }]);
@@ -21200,6 +21205,103 @@ module.exports = function() {
   return ReactPropTypes;
 };
 
+
+/***/ }),
+/* 32 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _react = __webpack_require__(6);
+
+var _react2 = _interopRequireDefault(_react);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+function _possibleConstructorReturn(self, call) { if (!self) { throw new ReferenceError("this hasn't been initialised - super() hasn't been called"); } return call && (typeof call === "object" || typeof call === "function") ? call : self; }
+
+function _inherits(subClass, superClass) { if (typeof superClass !== "function" && superClass !== null) { throw new TypeError("Super expression must either be null or a function, not " + typeof superClass); } subClass.prototype = Object.create(superClass && superClass.prototype, { constructor: { value: subClass, enumerable: false, writable: true, configurable: true } }); if (superClass) Object.setPrototypeOf ? Object.setPrototypeOf(subClass, superClass) : subClass.__proto__ = superClass; }
+
+var ChatRoom = function (_Component) {
+  _inherits(ChatRoom, _Component);
+
+  function ChatRoom(props, context) {
+    _classCallCheck(this, ChatRoom);
+
+    var _this = _possibleConstructorReturn(this, (ChatRoom.__proto__ || Object.getPrototypeOf(ChatRoom)).call(this, props, context));
+
+    _this.state = {
+      message: '',
+      messages: [{ id: 0, text: 'first message' }, { id: 1, text: 'second message' }, { id: 2, text: 'third message' }, { id: 3, text: 'fourth message' }]
+    };
+    return _this;
+  }
+
+  _createClass(ChatRoom, [{
+    key: 'updateMessage',
+    value: function updateMessage(event) {
+      console.log('updateMessage: ' + event.target.value);
+      this.setState({
+        message: event.target.value
+      });
+    }
+  }, {
+    key: 'submitMessage',
+    value: function submitMessage(event) {
+      console.log('submitMessage: ' + this.state.message);
+      var nextMessage = { //THIS IS THE KEY I CAN'T FIGURE OUT INDEPENDENTLY
+        id: this.state.messages.length,
+        text: this.state.message
+      };
+      var list = Object.assign([], this.state.messages);
+      list.push(nextMessage);
+      this.setState({
+        messages: list
+      });
+    }
+  }, {
+    key: 'render',
+    value: function render() {
+      var currentMessage = this.state.messages.map(function (message, i) {
+        return _react2.default.createElement(
+          'li',
+          { key: message.id },
+          message.text
+        );
+      });
+
+      return _react2.default.createElement(
+        'div',
+        null,
+        _react2.default.createElement(
+          'ol',
+          null,
+          currentMessage
+        ),
+        _react2.default.createElement('input', { onChange: this.updateMessage.bind(this), type: 'text', placeholder: 'Message' }),
+        _react2.default.createElement('br', null),
+        _react2.default.createElement(
+          'button',
+          { onClick: this.submitMessage.bind(this) },
+          'Submit Message'
+        )
+      );
+    }
+  }]);
+
+  return ChatRoom;
+}(_react.Component);
+
+exports.default = ChatRoom;
 
 /***/ })
 /******/ ]);
